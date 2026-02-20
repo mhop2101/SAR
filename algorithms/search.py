@@ -1,3 +1,5 @@
+from tracemalloc import start
+
 from algorithms.problems import SearchProblem
 import algorithms.utils as utils
 from world.game import Directions
@@ -96,8 +98,31 @@ def uniformCostSearch(problem: SearchProblem):
     Search the node of least total cost first.
     """
 
-    # TODO: Add your code here
-    utils.raiseNotDefined()
+    initial_state = problem.getStartState()
+    pqueue = utils.PriorityQueue()
+
+    pqueue.push((initial_state, [], 0), 0)
+
+    best = {initial_state: 0}
+    
+    
+    while not pqueue.isEmpty():
+        node, action, cost = pqueue.pop()
+        
+        if cost > best.get(node, float('inf')):
+            continue
+        
+        if problem.isGoalState(node):
+            #El objetivo
+            return action
+        
+        for element in problem.getSuccessors(node):
+            new_cost = cost + element[2]  
+            if new_cost < best.get(element[0], float('inf')):
+                best[element[0]] = new_cost
+                pqueue.push((element[0], action + [element[1]], new_cost), new_cost)
+    
+    return []
 
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
