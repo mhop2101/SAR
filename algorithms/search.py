@@ -117,10 +117,10 @@ def uniformCostSearch(problem: SearchProblem):
             return action
         
         for element in problem.getSuccessors(node):
-            new_cost = cost + element[2]  
-            if new_cost < best.get(element[0], float('inf')):
-                best[element[0]] = new_cost
-                pqueue.push((element[0], action + [element[1]], new_cost), new_cost)
+            new = cost + element[2]  
+            if new < best.get(element[0], float('inf')):
+                best[element[0]] = new
+                pqueue.push((element[0], action + [element[1]], new), new)
     
     return []
 
