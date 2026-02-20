@@ -65,8 +65,30 @@ def breadthFirstSearch(problem: SearchProblem):
     """
     Search the shallowest nodes in the search tree first.
     """
-    # TODO: Add your code here
-    utils.raiseNotDefined()
+    queue = utils.Queue()
+    actions = utils.Queue()
+    visited = set()
+    
+    queue.push(problem.getStartState())
+    actions.push([])
+    
+    while not queue.isEmpty():
+        node = queue.pop()
+        action = actions.pop()
+        
+        if node not in visited:
+            visited.add(node)
+        
+        if problem.isGoalState(node):
+            # Llegamos al objetivo
+            return action
+        
+        for element in problem.getSuccessors(node):
+            if element[0] not in visited:
+                queue.push(element[0])
+                actions.push( action + [element[1]])
+    
+    return []
 
 
 def uniformCostSearch(problem: SearchProblem):
