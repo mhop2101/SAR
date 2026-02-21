@@ -133,7 +133,7 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     utils.raiseNotDefined()
 
 
-# Abbreviations (you can use them for the -f option in main.py)
+# Abbreviations (you can use them for the -f option in main.py) -comentario
 bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
