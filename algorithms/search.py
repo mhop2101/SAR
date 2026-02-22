@@ -129,7 +129,6 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """
     Search the node that has the lowest combined cost and heuristic first.
     """
-    # TODO: Add your code here
     #Cola de prioridad
     from algorithms import utils
     openSet= utils.PriorityQueue()
