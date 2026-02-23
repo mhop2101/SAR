@@ -3,7 +3,7 @@ from tracemalloc import start
 from algorithms.problems import SearchProblem
 import algorithms.utils as utils
 from world.game import Directions
-from algorithms.heuristics import nullHeuristic
+from algorithms.heuristics import euclideanHeuristic, manhattanHeuristic, nullHeuristic
 
 
 def tinyHouseSearch(problem: SearchProblem):
@@ -128,7 +128,22 @@ def uniformCostSearch(problem: SearchProblem):
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """
     Search the node that has the lowest combined cost and heuristic first.
+    prompt para revisar el codigo:
+    "estoy haciendo un algoritmo A* Search para un problema de busqueda donde el agente debe encontrar el camino mas corto hasta un sobreviviente en un mapa con obstaculso,
+    el estado representa la posicion del agente y las acciones son los movimientos: arriba, abajo, izquierda o derecha y el costo de cada mvimiento es 1. este es el codigo qe hice, revisa si la logica esta bien."
+
+    tenia esto:
+    node, action, cost = openSet.pop() y en el for: for successor, action, cost in problem.getSuccessors(node):
+    estaba sobreescribiendo las variables y reutlizaba action y cost
+
+    me corrigio esta linea tentative_g = inicio + cost, ya que como inicio era un diccionario no se podia sumar y se debia poner como inicio[node]
+
+    habia ésta linea if successor in closedSet:, me dijo que no era necesario y que podia impedir un mejor camino mas adelante, tambien habia puesto update en vez de push
+    pero me dijo que no era necesario porque el push ya actualiza la prioridad si el nodo ya esta en la cola de prioridad.
+    
     """
+    #python main.py -p SimpleSurvivorProblem -f astar -l damagedOffice -h manhattanHeuristic
+    #python main.py -p SimpleSurvivorProblem -f astar -l damagedOffice -h euclideanHeuristic
     #Cola de prioridad
     from algorithms import utils
     openSet= utils.PriorityQueue()
@@ -147,14 +162,14 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
         if problem.isGoalState(node):
             return action
 
-        for successor, actions, cost in problem.getSuccessors(node):
+        for successor, succ_action, cost in problem.getSuccessors(node):
             
             tentative_g = inicio[node] + cost
 
             if tentative_g < inicio.get(successor, float('inf')):
                 inicio[successor] = tentative_g
                 f = tentative_g + heuristic(successor, problem)
-                openSet.update((successor, action + [actions], tentative_g), f)
+                openSet.push((successor, action + [succ_action], tentative_g), f)
     return []
 
 
