@@ -3,7 +3,7 @@ from tracemalloc import start
 from algorithms.problems import SearchProblem
 import algorithms.utils as utils
 from world.game import Directions
-from algorithms.heuristics import nullHeuristic
+from algorithms.heuristics import euclideanHeuristic, manhattanHeuristic, nullHeuristic
 
 
 def tinyHouseSearch(problem: SearchProblem):
@@ -129,6 +129,8 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """
     Search the node that has the lowest combined cost and heuristic first.
     """
+    #python main.py -p SimpleSurvivorProblem -f astar -l damagedOffice -h manhattanHeuristic
+    #python main.py -p SimpleSurvivorProblem -f astar -l damagedOffice -h euclideanHeuristic
     #Cola de prioridad
     from algorithms import utils
     openSet= utils.PriorityQueue()
@@ -147,14 +149,14 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
         if problem.isGoalState(node):
             return action
 
-        for successor, actions, cost in problem.getSuccessors(node):
+        for successor, succ_action, cost in problem.getSuccessors(node):
             
             tentative_g = inicio[node] + cost
 
             if tentative_g < inicio.get(successor, float('inf')):
                 inicio[successor] = tentative_g
                 f = tentative_g + heuristic(successor, problem)
-                openSet.update((successor, action + [actions], tentative_g), f)
+                openSet.push((successor, action + [succ_action], tentative_g), f)
     return []
 
 
